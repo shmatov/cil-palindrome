@@ -1,36 +1,68 @@
 .assembly palindrome {}
 
-.method static void Main()
+.namespace Palindrome
 {
-    .entrypoint
-    .locals (char[] word, int32 length)
-    .maxstack 1
-
-    ldstr "Hello world! :)"
-    call void [mscorlib]System.Console::WriteLine(string)
-    call char[] ReadWord()
-    stloc word
-    ldloc word
-    call int32 WordLength(char[])
-    stloc length
-    ldloc length
-    call void [mscorlib]System.Console::Write(int32)
-    ret
-}
-
-.method static char[] ReadWord()
-{
-    .maxstack 1
-    call string [mscorlib]System.Console::ReadLine()
-    callvirt instance char[] string::ToCharArray()
-    ret
-}
-
-.method static int32 WordLength(char[] word)
-{
-    .maxstack 1
-    ldarg word
-    ldlen
-    conv.i4
-    ret
+    .method static void Main()
+    {
+        .entrypoint
+        .maxstack 3
+    
+        .locals (char[] word)
+    
+        call char[] ReadWord()
+        stloc word
+    
+        // word
+        ldloc word
+        // head
+        ldc.i4.0
+        //tail
+        ldloc word
+        call int32 LastWordIndex(char[])
+    
+        call bool IsPalindrome(char[], int32, int32)
+        call void [mscorlib]System.Console::Write(bool)
+        ret
+    }
+    
+    .method static char[] ReadWord()
+    {
+        .maxstack 1
+        call string [mscorlib]System.Console::ReadLine()
+        callvirt instance char[] string::ToCharArray()
+        ret
+    }
+    
+    .method static int32 LastWordIndex(char[] word)
+    {
+        .maxstack 2
+        ldarg word
+        ldlen
+        conv.i4
+        ldc.i4.1
+        sub
+        ret
+    }
+    
+    .method static bool IsPalindrome(char[] word, int32 head, int32 tail)
+    {
+        .maxstack 3
+        ldarg word
+        ldarg head
+        ldelem char
+    
+        ldarg word
+        ldarg tail
+        ldelem char
+    
+        beq EQUAL
+        ldc.i4.0
+        br CONTINUE
+    
+    EQUAL:
+        ldc.i4.1
+    
+    CONTINUE:
+        ret
+    }
 }

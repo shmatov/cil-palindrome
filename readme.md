@@ -15,3 +15,4 @@ Commands
 * `ldarg name` - load argument onto the stack.
 * `ldlen` - push the length of array on the stack.
 * `conv.i4` - convert to int32, pushing int32 on stack.
+* `ldelem type` - Load the element with type at index onto the top of the stack as an type.
