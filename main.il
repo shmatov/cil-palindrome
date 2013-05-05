@@ -6,9 +6,12 @@
     {
         .entrypoint
         .maxstack 3
-    
+
         .locals (char[] word)
-    
+
+        ldstr "Type your word:"
+        call void [mscorlib]System.Console::WriteLine(string)
+
         call char[] ReadWord()
         stloc word
     
@@ -21,7 +24,15 @@
         call int32 LastWordIndex(char[])
     
         call bool IsPalindrome(char[], int32, int32)
-        call void [mscorlib]System.Console::Write(bool)
+        brtrue IS_PALINDROME
+        ldstr "It's not a palindrome"
+        br SHOW_RESULT
+
+    IS_PALINDROME:
+        ldstr "It's a palindrome."
+
+    SHOW_RESULT:
+        call void [mscorlib]System.Console::WriteLine(string)
         ret
     }
     
@@ -48,7 +59,7 @@
         .maxstack 3
         ldarg head
         ldarg tail
-        bge YEP
+        bge IS_PALINDROME
 
         ldarg word
         ldarg head
@@ -57,12 +68,12 @@
         ldarg word
         ldarg tail
         ldelem char
-    
-        beq EQUAL
+
+        beq CONTINUE_CHECKING
         ldc.i4.0
         ret
     
-    EQUAL:
+    CONTINUE_CHECKING:
         ldarg word
         ldarg head
         call int32 Inc(int32)
@@ -71,7 +82,7 @@
         call bool IsPalindrome(char[], int32, int32)
         ret
 
-    YEP:
+    IS_PALINDROME:
         ldc.i4.1
         ret
     }
