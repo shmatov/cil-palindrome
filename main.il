@@ -39,14 +39,17 @@
         ldarg word
         ldlen
         conv.i4
-        ldc.i4.1
-        sub
+        call int32 Dec(int32)
         ret
     }
     
     .method static bool IsPalindrome(char[] word, int32 head, int32 tail)
     {
         .maxstack 3
+        ldarg head
+        ldarg tail
+        bge YEP
+
         ldarg word
         ldarg head
         ldelem char
@@ -57,12 +60,37 @@
     
         beq EQUAL
         ldc.i4.0
-        br CONTINUE
+        ret
     
     EQUAL:
+        ldarg word
+        ldarg head
+        call int32 Inc(int32)
+        ldarg tail
+        call int32 Dec(int32)
+        call bool IsPalindrome(char[], int32, int32)
+        ret
+
+    YEP:
         ldc.i4.1
-    
-    CONTINUE:
+        ret
+    }
+
+    .method static int32 Inc(int32 num)
+    {
+        .maxstack 2
+        ldarg num
+        ldc.i4.1
+        add
+        ret
+    }
+
+    .method static int32 Dec(int32 num)
+    {
+        .maxstack 2
+        ldarg num
+        ldc.i4.1
+        sub
         ret
     }
 }
