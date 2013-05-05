@@ -1,1 +1,2 @@
-ilasm main.il /exe /debug /output:main
+#!/bin/bash
+ilasm main.il /exe /debug /output:run
